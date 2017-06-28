@@ -34,11 +34,11 @@ Executar `docker container port 6740b6c4f3ba` deve retornar uma lista vazia.
 
 Como mapear as portas? 2 opções no docker container run:
 
-- -P: mapeia as portas para portas randomicas no host
+- -P: mapeia as portas para portas randômicas no host
 - -p \<container-port\>:
 \<host-port\>: mapeia as portas específicas
 
-Assim, podemos exeutar `docker container run -p 5432:5432 postgres`.
+Assim, podemos executar `docker container run -p 5432:5432 postgres`.
 
 O container em execução agora tem a porta mapeada para o host `docker container ls`
 
@@ -61,7 +61,7 @@ O comando `docker container run -p 5432:5432 -d postgres` executará o container
 Do que nossa aplicação precisa pra executar?
 
 - Java
-- make para executar os comandos
+- Make para executar os comandos
 - Código fonte!
 
 A partir de uma máquina nova (assumindo ubuntu), como instalar essas dependências?
@@ -111,11 +111,11 @@ Depender de `latest` não é uma boa prática, vamos mudar para 16.04 (versão c
 FROM ubuntu:16.04
 ```
 
-## Dando nome a nossa imagem
+## Dando nome à nossa imagem
 
-Podemos associar uma tag a imagem criada usando a opção `-t`:
+Podemos associar uma tag à imagem criada usando a opção `-t`:
 
-`docker image build . -t javakioh`
+`docker image build . -t javakihon`
 
 | REPOSITORY | TAG | IMAGE ID | CREATED | SIZE |
 |------------|-----|----------|---------|------|
@@ -127,7 +127,7 @@ Para padronizar a execução, podemos adicionar o seguinte bloco no `Makefile`
 
 ```
 buildImage:  
-  docker image build . -t javakioh
+  docker image build . -t javakihon
 ```
 
 Agora podemos criar uma versão nova da imagem usando `make buildImage`.
@@ -146,13 +146,13 @@ Outros comandos interessantes: `docker container ls`, `docker start` e `docker s
 
 ## Código fonte
 
-Copiar arquivos do host para a image é feito usando o comando `COPY`:
+Copiar arquivos do host para a imagem é feito usando o comando `COPY`:
 
 ```
 COPY . /app
 ```
 
-Devemos recriar a image `make buildImage` e então podemos verificar se o código está por lá `docker container run javakihon ls /app`
+Devemos recriar a imagem `make buildImage` e então podemos verificar se o código está por lá `docker container run javakihon ls /app`
 
 ## Executando testes a partir do container
 
@@ -188,17 +188,17 @@ Vamos executar o nosso container na mesma rede: `docker container run -ti --netw
 Para saber se a rede está corretamente configurada, podemos verificar o arquivo `/etc/hosts`:
 
 >root@18e2f6857bdb:/# cat /etc/hosts  
-127.0.0.1	localhost  
-::1	localhost ip6-localhost ip6-loopback  
-fe00::0	ip6-localnet  
-ff00::0	ip6-mcastprefix  
-ff02::1	ip6-allnodes  
-ff02::2	ip6-allrouters  
-172.18.0.3	18e2f6857bdb <- container
+127.0.0.1 localhost  
+::1 localhost ip6-localhost ip6-loopback  
+fe00::0 ip6-localnet  
+ff00::0 ip6-mcastprefix  
+ff02::1 ip6-allnodes  
+ff02::2 ip6-allrouters  
+172.18.0.3  18e2f6857bdb <- container
 
 Podemos pingar o outro container `ping 18e2f6857bdb` (precisa instalar o ping).
 
-Todavia, o nome do containter é efêmero, portando o aquivo mudará a cada nova execução do postgres. Para mitigar esse problema, podemos dar um nome ao container: `docker container run --name=db --network=javakihon postgres`
+Todavia, o nome do containter é efêmero, portando o arquivo mudará a cada nova execução do postgres. Para mitigar esse problema, podemos dar um nome ao container: `docker container run --name=db --network=javakihon postgres`
 
 `ping db` deve funcionar agora:
 
@@ -232,13 +232,13 @@ spring:
 
 ## Executando a aplicação no container
 
-Agora podemos indicar qual o endereço do banco de dados na própria image:
+Agora podemos indicar qual o endereço do banco de dados na própria imagem:
 
 ```
 ENV DB_HOST db
 ```
 
-Também podemos adicinar um comando padrão para executá-la:
+Também podemos adicionar um comando padrão para executá-la:
 
 ```
 CMD cd /app && make run
@@ -252,7 +252,7 @@ Como acessar do host?
 
 ## Acessando de fora do container
 
-Devemos indicar, no momemnto de criação da image, que o container deve aceitar conexões em uma determinada porta:
+Devemos indicar, no momemnto de criação da imagem, que o container deve aceitar conexões em uma determinada porta:
 
 ```
 EXPOSE 8080  
